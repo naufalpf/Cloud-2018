@@ -236,7 +236,7 @@ php artisan migrate
 
 Test server bisa diakses dengan membuka port 8080 
 Dapat dilihat dengan membuka http://localhost:8080 pada browser host
-![alt text](https://github.com/ariya01/Cloud/blob/master/no.3/ 	nomer4.png)
+![alt text](https://github.com/ariya01/Cloud/blob/master/no.3/nomer4.png)
 
 
 
