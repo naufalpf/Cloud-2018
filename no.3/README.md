@@ -1,4 +1,4 @@
-3. Buat vagrant virtualbox dan lakukan provisioning install:
+# 3. Buat vagrant virtualbox dan lakukan provisioning install:
 
     php
     mysql
@@ -7,23 +7,28 @@
 
 setelah melakukan provioning, clone https://github.com/fathoniadi/pelatihan-laravel.git pada folder yang sama dengan vagrantfile di komputer host. Setelah itu sinkronisasi folder pelatihan-laravel host ke vagrant ke /var/www/web dan jangan lupa install vendor laravel agar dapat dijalankan. Setelah itu setting root document nginx ke /var/www/web. webserver VM harus dapat diakses pada port 8080 komputer host dan mysql pada vm dapat diakses pada port 6969 komputer host
 
-# Tugas no. 3
+# Jawaban no. 3
 config vm.box menggunakan Ubuntu 16.04
 dan forward port
 ![alt text](https://github.com/ariya01/Cloud/blob/master/no.3/nomer41.png)
 
 Lakukan sinkronisasi folder
 dengan perintah ini:
+```
+
 config.vm.synced_folder "pelatihan-laravel/", "/var/www/web", id: "vagrant-root",
     owner: "vagrant",
     group: "www-data",
     mount_options: ["dmode=775,fmode=664"]
 
+```
 
 ## Script Provisioning
 Kami membuat file laravel.sh dan tambahkan script-script dibawah pada file tersebut.
 
 ### Script untuk install PHP7
+```
+
 add-apt-repository ppa:ondrej/php
 apt-get update
 apt-get install -y python-software-properties software-properties-common
@@ -33,6 +38,7 @@ apt-get install -y php7.1-mysql
 apt-get install -y mcrypt php7.1-mcrypt
 apt-get install -y php7.1-cli php7.1-curl php7.1-mbstring php7.1-xml php7.1-mysql
 apt-get install -y php7.1-json php7.1-cgi php7.1-gd php-imagick php7.1-bz2 php7.1-zip
+```
 
 ### Script untuk install mysql
 ```
