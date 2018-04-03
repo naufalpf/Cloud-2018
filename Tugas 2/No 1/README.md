@@ -1,6 +1,6 @@
-##Soal 1
+## Soal 1
 
-###Langkah :
+### Langkah :
 1. Membuat Vagrant Box
 ```
 Vagrant init
