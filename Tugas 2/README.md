@@ -10,3 +10,7 @@ Buatlah sistem load balancing dengan 1 load balancer(nginx dan 2 worker(apache2)
 1. Lakukan soal nomor 1 dan dokumentasikan bagaimana cara setupnya pada laporan markdown.
 2.Untuk nomor 2 dan 3 merupakan analisa terhadap suatu masalah, jawablah pertanyaan diatas dan tulis pada laporan.
 
+## Jawaban
+[No 1](https://github.com/ariya01/Cloud/tree/master/Tugas%202/No%201)
+[No 2](https://github.com/ariya01/Cloud/tree/master/Tugas%202/No%202)
+[No 3](https://github.com/ariya01/Cloud/tree/master/Tugas%202/No%203)
