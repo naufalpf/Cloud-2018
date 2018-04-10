@@ -1,4 +1,4 @@
-## Soal 1
+## Soal 2
 
 #### Round Robin:
 Algoritma ini akan membagi pengakses webiste akan menjadi sama rata. Algoritma ini sangat sederhana sehingga harus di konfigurasi lagi untuk masalah session agar tidak terjadi masalah
