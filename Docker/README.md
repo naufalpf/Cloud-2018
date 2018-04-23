@@ -76,40 +76,89 @@ sudo docker run hello-world
 ```
 
 ```
-    version: '3.6'
-    services:
-        db:
-            image: mysql:5.7
-            volumes:
-                - ./reservasi:/docker-entrypoint-initdb.d
-                - dbdata:/var/lib/mysql
-            restart: always
-            environment:
-                MYSQL_ROOT_PASSWORD: buayakecil
-                MYSQL_DATABASE: reservasi
-                MYSQL_USER: userawan
-                MYSQL_PASSWORD: buayakecil
+ version: '3.3'
 
-        worker:
-            image: reserve
-            depends_on:
-                - db
-            environment:
-                DB_HOST: db
-                DB_USERNAME: userawan
-                DB_PASSWORD: buayakecil
-                DB_NAME: reservasi
+services:
+    db:
+        image: mysql:5.7
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: buayakecil
+            MYSQL_DATABASE: reservasi
+            MYSQL_USER: userawan
+            MYSQL_PASSWORD: buayakecil
+        volumes:
+            - ./reservasi:/docker-entrypoint-initdb.d
+            - dbdata:/var/lib/mysql
+        networks:
+            ip-docker:
+                ipv4_address: 10.5.5.5
 
-        nginx:
-            image: nginx:stable-alpine
-            ports:
-                - 1234:80
-            depends_on:
-                - worker
-            volumes:
-                - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
-    volumes:
-        dbdata:
+    worker1:
+        image: reserve
+        depends_on:
+            - db
+        restart: always
+        environment: 
+            DB_HOST: 10.5.5.5
+            DB_USERNAME: userawan
+            DB_PASSWORD: buayakecil
+            DB_NAME: reservasi
+        networks:
+            ip-docker:
+                ipv4_address: 10.5.5.10
+
+    worker2:
+        image: reserve
+        depends_on:
+            - db
+        restart: always
+        environment: 
+            DB_HOST: 10.5.5.5
+            DB_USERNAME: userawan
+            DB_PASSWORD: buayakecil
+            DB_NAME: reservasi
+        networks:
+            ip-docker:
+                ipv4_address: 10.5.5.11
+
+    worker3:
+        image: reserve
+        depends_on:
+            - db
+        restart: always
+        environment:
+            DB_HOST: 10.5.5.5
+            DB_USERNAME: userawan
+            DB_PASSWORD: buayakecil
+            DB_NAME: reservasi
+        networks:
+            ip-docker:
+                ipv4_address: 10.5.5.12
+
+    load-balancer:
+        image: nginx:stable-alpine
+        depends_on:
+            - worker1
+            - worker2
+            - worker3
+        volumes:
+            - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+        ports:
+            - 1234:80
+        networks: 
+            ip-docker:
+                ipv4_address: 10.5.5.6
+
+volumes:
+    dbdata:
+
+networks: 
+    ip-docker:
+        driver: bridge
+        ipam: 
+            config:
+                - subnet: 10.5.5.0/24ubnet: 10.5.5.0/24
 ```
 
 ![Compose](img/2.png "Docker Compose")
@@ -127,10 +176,7 @@ sudo docker run hello-world
 ```
     docker-compose restart nginx
 ```
-- Step 3 - Mengecek apakah worker 2 dan 3 sudah berjalan
-```
-    docker ps
-```
+- Step 3 - Me
 
 ![Scale](img/3.png "Docker Scale")
 
@@ -140,6 +186,12 @@ sudo docker run hello-world
 
 - Konfigurasi untuk **nginx.conf** sebagai berikut :
 ```
+    upstream worker {
+    server 10.5.5.10;
+    server 10.5.5.11;
+    server 10.5.5.12;
+}
+
     server {
         listen  80 default_server;
         location / {
@@ -147,9 +199,11 @@ sudo docker run hello-world
         }
     }
 ```
-
+4. Jalan kan 
+```
+docker-compose up -d
+```
 ##### Nomer 4
 - Tampilan Website ketika mengakses ***localhost:1234***
-![Web](img/4.png "Web")
 
 
