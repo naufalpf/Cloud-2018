@@ -205,5 +205,10 @@ docker-compose up -d
 ```
 ##### Nomer 4
 - Tampilan Website ketika mengakses ***localhost:1234***
+![Scale](img/7.png "Docker Sc")
 
-
+##### Kesulitan 
+1. kurangnya akses super user
+![Scale](img/5.png "Docker Sc")
+2. Belum membuat nginx.conf
+![Scale](img/6.png "Docker Sc")
