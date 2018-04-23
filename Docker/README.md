@@ -3,9 +3,38 @@
 ### Anggota Kelompok :
 
 ##### 1. Naufal Pranasetyo F.	5115100057
-##### 2. Ariya WIldan Devanto	5115100057
+##### 2. Ariya Wildan Devanto	5115100123
 
 ### Tugas Docker
+
+##### Pra Pembuatan
+- Instalasi 
+
+```
+- $ sudo apt-get update
+- sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common
+- https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+- sudo apt-key fingerprint 0EBFCD88
+- sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+- sudo apt-get update
+- sudo apt-get install docker-ce=18.03.0.ce
+```
+- Cek 
+
+```
+sudo docker run hello-world
+```
+- Hasil
+
+![Build](img/4.png "Build-Image")
+
 
 ##### No. 1
 - Step 1 - Buat direktori baru untuk Docker
