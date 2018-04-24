@@ -92,7 +92,7 @@ services:
             - dbdata:/var/lib/mysql
         networks:
             ip-docker:
-                ipv4_address: 10.5.5.5
+                ipv4_address: 60.5.5.5
 
     worker1:
         image: reserve
@@ -100,13 +100,13 @@ services:
             - db
         restart: always
         environment: 
-            DB_HOST: 10.5.5.5
+            DB_HOST: 60.5.5.5
             DB_USERNAME: userawan
             DB_PASSWORD: buayakecil
             DB_NAME: reservasi
         networks:
             ip-docker:
-                ipv4_address: 10.5.5.10
+                ipv4_address: 60.5.5.10
 
     worker2:
         image: reserve
@@ -114,13 +114,13 @@ services:
             - db
         restart: always
         environment: 
-            DB_HOST: 10.5.5.5
+            DB_HOST: 60.5.5.5
             DB_USERNAME: userawan
             DB_PASSWORD: buayakecil
             DB_NAME: reservasi
         networks:
             ip-docker:
-                ipv4_address: 10.5.5.11
+                ipv4_address: 60.5.5.11
 
     worker3:
         image: reserve
@@ -128,13 +128,13 @@ services:
             - db
         restart: always
         environment:
-            DB_HOST: 10.5.5.5
+            DB_HOST: 60.5.5.5
             DB_USERNAME: userawan
             DB_PASSWORD: buayakecil
             DB_NAME: reservasi
         networks:
             ip-docker:
-                ipv4_address: 10.5.5.12
+                ipv4_address: 60.5.5.12
 
     load-balancer:
         image: nginx:stable-alpine
@@ -148,7 +148,7 @@ services:
             - 1234:80
         networks: 
             ip-docker:
-                ipv4_address: 10.5.5.6
+                ipv4_address: 60.5.5.6
 
 volumes:
     dbdata:
@@ -158,7 +158,7 @@ networks:
         driver: bridge
         ipam: 
             config:
-                - subnet: 10.5.5.0/24ubnet: 10.5.5.0/24
+                - subnet: 60.5.5.0/24
 ```
 
 ![Compose](img/2.png "Docker Compose")
@@ -166,19 +166,7 @@ networks:
 - **Keterangan :**
 ##### Nomer 2
 1. Worker - Menggunakan Image pada soal nomer 1
-2. Worker - Pada untuk mengerjakan soal nomer 2 akan menggunakan docker-compose load balancing dan scaling.
-
-- Step 1 - Buat scale untuk worker ke 2 dan ke 3, keterangan worker=3 karena akan membuat 3 worker
-```
-    docker-compose scale worker=3
-```
-- Step 2 - Restart nginx pada container
-```
-    docker-compose restart nginx
-```
-- Step 3 - Me
-
-![Scale](img/3.png "Docker Scale")
+2. Worker - Pada untuk mengerjakan soal nomer 2 akan menggunakan docker-compose load balancing
 
 ##### Nomer 3
 1. Nginx - Menggunakan image container dari Docker Hub -> nginx:stable-alpine
