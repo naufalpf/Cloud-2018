@@ -92,7 +92,7 @@ services:
             - dbdata:/var/lib/mysql
         networks:
             ip-docker:
-                ipv4_address: 60.5.5.5
+                ipv4_address: 60.151.5.5
 
     worker1:
         image: reserve
@@ -100,13 +100,13 @@ services:
             - db
         restart: always
         environment: 
-            DB_HOST: 60.5.5.5
+            DB_HOST: db
             DB_USERNAME: userawan
             DB_PASSWORD: buayakecil
             DB_NAME: reservasi
         networks:
             ip-docker:
-                ipv4_address: 60.5.5.10
+                ipv4_address: 60.151.5.10
 
     worker2:
         image: reserve
@@ -114,13 +114,13 @@ services:
             - db
         restart: always
         environment: 
-            DB_HOST: 60.5.5.5
+            DB_HOST: db
             DB_USERNAME: userawan
             DB_PASSWORD: buayakecil
             DB_NAME: reservasi
         networks:
             ip-docker:
-                ipv4_address: 60.5.5.11
+                ipv4_address: 60.151.5.11
 
     worker3:
         image: reserve
@@ -128,13 +128,13 @@ services:
             - db
         restart: always
         environment:
-            DB_HOST: 60.5.5.5
+            DB_HOST: db
             DB_USERNAME: userawan
             DB_PASSWORD: buayakecil
             DB_NAME: reservasi
         networks:
             ip-docker:
-                ipv4_address: 60.5.5.12
+                ipv4_address: 60.151.5.12
 
     load-balancer:
         image: nginx:stable-alpine
@@ -148,7 +148,7 @@ services:
             - 1234:80
         networks: 
             ip-docker:
-                ipv4_address: 60.5.5.6
+                ipv4_address: 60.151.5.6
 
 volumes:
     dbdata:
@@ -158,7 +158,7 @@ networks:
         driver: bridge
         ipam: 
             config:
-                - subnet: 60.5.5.0/24
+                - subnet: 60.151.5.0/24
 ```
 
 ![Compose](img/2.png "Docker Compose")
@@ -175,9 +175,9 @@ networks:
 - Konfigurasi untuk **nginx.conf** sebagai berikut :
 ```
     upstream worker {
-    server 10.5.5.10;
-    server 10.5.5.11;
-    server 10.5.5.12;
+    server 60.151.5.10;
+    server 60.151.5.11;
+    server 60.151.5.12;
 }
 
     server {
@@ -193,10 +193,12 @@ docker-compose up -d
 ```
 ##### Nomer 4
 - Tampilan Website ketika mengakses ***localhost:1234***
-![Scale](img/7.png "Docker Sc")
+![Scale](img/8.png "Docker Sc")
 
 ##### Kesulitan 
 1. kurangnya akses super user
 ![Scale](img/5.png "Docker Sc")
 2. Belum membuat nginx.conf
 ![Scale](img/6.png "Docker Sc")
+3. Karena ter cache maka harus di hapus terlebih dahulu ***docker volume rm -f dockerku_dbdata***
+![Scale](img/7.png "Docker Sc")
