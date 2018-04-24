@@ -175,9 +175,9 @@ networks:
 - Konfigurasi untuk **nginx.conf** sebagai berikut :
 ```
     upstream worker {
-    server 10.5.5.10;
-    server 10.5.5.11;
-    server 10.5.5.12;
+    server 60.5.5.10;
+    server 60.5.5.11;
+    server 60.5.5.12;
 }
 
     server {
