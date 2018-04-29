@@ -8,7 +8,7 @@ Dengan Perintah ini:
 ```
 echo -e "buayakecil\nbuayakecil\n" | sudo adduser --gecos "" awan
 ```
-[1](https://github.com/ariya01/Cloud/blob/master/Vagrant/no.1/gambar/Screenshot%20from%202018-03-13%2003-06-27.png)
+![1](https://github.com/ariya01/Cloud/blob/master/Vagrant/no.1/gambar/Screenshot%20from%202018-03-13%2003-06-27.png)
 #### Dan Berhasil
 [2](/gambar/Screenshot%20from%202018-03-13%2003-21-13.png)
 ### * Kegagalan 
