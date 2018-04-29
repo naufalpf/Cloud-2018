@@ -74,11 +74,21 @@ location /
     ```
 6. Konfigurasi mengaktifkan dengan perintah **sudo ln -s /etc/nginx/sites-available/default /etc/nginx/site-enable/**
 
+## Soal 2
 
+#### Round Robin:
+Algoritma ini akan membagi pengakses webiste akan menjadi sama rata. Algoritma ini sangat sederhana sehingga harus di konfigurasi lagi untuk masalah session agar tidak terjadi masalah
 
-## Pentunjuk
-1. Lakukan soal nomor 1 dan dokumentasikan bagaimana cara setupnya pada laporan markdown.
-2.Untuk nomor 2 dan 3 merupakan analisa terhadap suatu masalah, jawablah pertanyaan diatas dan tulis pada laporan.
+### Least Connection
+Algortima ini akan membagi pengakses kepada yang memiliki beban yang rendah. Tetapi akan memiliki masalah yang sama dengan Round Robin untuk sessionnya
+
+### IP Hast
+Algoritma ini algoritma yang akan membagi berdasarkan ditribusi IPnya. Sehingga 1 IP akan mengakses 1 server yang sama terus menerus sampai terjadi masalah misalnya server mati atau down akan di pindahkan ke server lain.
+
+## Soal 3
+
+### Session Affinity (Sticky Sessions)
+Adalah Sebuah metode yang digunakan untuk aplikasi load balancing. Router atau load balancer dapat menetapkan satu server ke pengguna tertentu, berdasarkan sesi HTTP atau alamat IP mereka. Server yang ditetapkan diingat oleh router untuk jangka waktu tertentu, memastikan bahwa semua permintaan masa depan untuk sesi yang sama dikirim ke server yang sama.
 
 ## Jawaban
 [No 1](https://github.com/ariya01/Cloud/tree/master/Nginx/No%201)
