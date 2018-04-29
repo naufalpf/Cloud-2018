@@ -191,6 +191,7 @@ networks:
 ```
 docker-compose up -d
 ```
+![Scale](img/3.png "Scale-Image")
 ##### Nomer 4
 - Tampilan Website ketika mengakses ***localhost:1234***
 ![Scale](img/8.png "Docker Sc")
