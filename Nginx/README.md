@@ -73,7 +73,41 @@ location /
 			}
     ```
 6. Konfigurasi mengaktifkan dengan perintah **sudo ln -s /etc/nginx/sites-available/default /etc/nginx/site-enable/**
+config.php
+		
+		# Add index.php to the list if you are using PHP
+        index index.php index.html index.htm index.nginx-debian.html;
 
+        # pass the PHP scripts to FastCGI server listening on "lb"
+		location ~ \.php$ {
+               include snippets/fastcgi-php.conf;
+               fastcgi_pass lb;
+        }
+
+7. Restart Nginx
+		
+		sudo service nginx restart
+
+8. Edit file config PHP-fpm pada Worker 1 dan 2
+
+		/etc/php/7.0/fpm/pool.d/www.conf
+
+Ubah variabel
+		
+		dari :
+			listen = /run/php/php7.0-fpm.sock
+		
+		menjadi :
+			listen = 9000
+
+9. Restart PHP-fpm
+
+		sudo service php7.0-fpm restart
+
+10.  Buat file PHP di masing masing Load balancer dan Worker
+
+		/var/www/html/index.php
+		
 ## Soal 2
 
 #### Round Robin:
