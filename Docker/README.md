@@ -175,9 +175,15 @@ networks:
 - Konfigurasi untuk **nginx.conf** sebagai berikut :
 ```
     upstream worker {
+<<<<<<< HEAD
     server 60.151.5.10;
     server 60.151.5.11;
     server 60.151.5.12;
+=======
+    server 60.5.5.10;
+    server 60.5.5.11;
+    server 60.5.5.12;
+>>>>>>> master
 }
 
     server {
@@ -201,5 +207,8 @@ docker-compose up -d
 ![Scale](img/5.png "Docker Sc")
 2. Belum membuat nginx.conf
 ![Scale](img/6.png "Docker Sc")
+<<<<<<< HEAD
 3. Karena ter cache maka harus di hapus terlebih dahulu ***docker volume rm -f dockerku_dbdata***
 ![Scale](img/7.png "Docker Sc")
+=======
+>>>>>>> master
