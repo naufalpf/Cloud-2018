@@ -122,8 +122,10 @@ ansible-playbook -i hosts gitcurl.yml -k
 ```sh
 ansible-playbook -i hosts php.yml -k
 ```
-	![curl](gambar/gitcurl.png "curl")
-	![php](gambar/php.png "php")
+
+![Testing](gambar/testing.png)
+![curl](gambar/gitcurl.png "curl")
+![php](gambar/php.png "php")
 	
 ## 5. Clone git
 
