@@ -80,10 +80,10 @@ Software yang dibutuhkan untuk menjalankan Aplikasi Laravel 5.6 adalah:
 
 Seluruh software tersebut akan diinstall pada hosts **worker** menggunakan file **yml**. Dalam dunia per-ansible-an, kita menyebutnya sebagai **playbook**.
 
-1. Membuat playbook baru bernama **gitcurl.yml**.
+1. Membuat playbook baru bernama **master.yml**.
 
     ```
-    gedit gitcurl.yml
+    gedit master.yml
     ```
 2. Menuliskan script berikut:
 ```
@@ -102,7 +102,7 @@ Seluruh software tersebut akan diinstall pada hosts **worker** menggunakan file 
 
 3. Install PHP 7.2
 
-ansible-playbook -i hosts gitcurl.yml -k
+ansible-playbook -i hosts php.yml -k
 ```
 
     Keterangan:
@@ -124,36 +124,31 @@ ansible-playbook -i hosts php.yml -k
 ```
 
 ![Testing](gambar/testing.png)
-![curl](gambar/gitcurl.png "curl")
+![curl](gambar/master.png "curl")
 ![php](gambar/php.png "php")
 	
 ## 5. Clone git
 
-Membuka ```gitcurl.yml``` dan memasukkan script berikut:
+Membuka ```master.yml``` dan memasukkan script berikut:
 
 ```yml
     # CLONE GIT
     - name: Bikin direktori
       become: true
       file:
-        path: "{{ laravel_root_dir }}"
+        path: "{{ /var/www/laravel }}"
         state: directory
-        owner: "{{ ansible_ssh_user }}"
-        group: "{{ ansible_ssh_user }}"
+        owner: "{{ cloud }}"
+        group: "{{ cloud }}"
         recurse: yes
 
     - name: Clone git
       git:
-        dest: "{{ laravel_root_dir }}"
+        dest: "{{ /var/www/laravel }}"
         repo: https://github.com/udinIMM/Hackathon.git
         force: yes
 ```
 	
-	
-Keterangan:
-
-* Variable ```laravel_root_dir``` diganti dengan ```/var/www/laravel``` yang nantinya akan di-declare di modul ```vars```.
-* Variable ```ansible_ssh_user``` diganti sesuai dengan yang ada pada file ```hosts``` yang dalam hal ini adalah ```cloud```.
 
 
 ## 6. Install Composer
@@ -177,50 +172,44 @@ Keterangan:
 
         - name: Install dependencies laravel
           composer:
-            working_dir: "{{ laravel_root_dir }}"
+            working_dir: "{{ /var/www/laravel/storage }}"
             no_dev: no
         
         # SETTING ENVIRONMENT
         - name: Bikin .env
-          command: cp "{{ laravel_root_dir }}/.env.example" "{{ laravel_root_dir }}/.env"
+          command: cp "{{ /var/www/laravel/storage }}/.env.example" "{{ /var/www/laravel/storage }}/.env"
         
         - name: php artisan key generate
-          command: php "{{ laravel_root_dir }}/artisan" key:generate
+          command: php "{{ /var/www/laravel/storage }}/artisan" key:generate
 
         - name: php artisan clear cache
-          command: php "{{ laravel_root_dir }}/artisan" cache:clear
+          command: php "{{ /var/www/laravel/storage }}/artisan" cache:clear
         
         - name: set APP_DEBUG=false
           lineinfile: 
-            dest: "{{ laravel_root_dir }}/.env"
+            dest: "{{ /var/www/laravel/storage }}/.env"
             regexp: '^APP_DEBUG='
             line: APP_DEBUG=false
 
         - name: set APP_ENV=production
           lineinfile: 
-            dest: "{{ laravel_root_dir }}/.env"
+            dest: "{{ /var/www/laravel/storage }}/.env"
             regexp: '^APP_ENV='
             line: APP_ENV=production
 
-        - name: Ganti permission bootstrap/cache directory
+        - name: Ganti permission cache directory
           file:
-            path: "{{ laravel_cache_dir }}"
+            path: "{{ /var/www/laravel/cache }}"
             state: directory
             mode: "a+x"
 
         - name: Ganti permission vendor directory
-          command: chmod -R 777 "{{ laravel_vendor_dir }}"
+          command: chmod -R 777 "{{ /var/www/laravel/vendor }}"
 
         - name: Ganti permission storage directory
-          command: chmod -R 777 "{{ laravel_storage_dir }}" 
+          command: chmod -R 777 "{{ /var/www/laravel/storage }}" 
     ```
-    Keterangan:
-
-    * Kami menginstall **Composer** menggunakan script yang disimpan dalam ```scripts/install_composer.sh```.
-    * Variable ```laravel_cache_dir``` diganti dengan ```/var/www/laravel/bootstrap/cache``` yang nantinya akan di-declare di modul ```vars```.
-    * Variable ```laravel_vendor_dir``` diganti dengan ```/var/www/laravel/vendor``` yang nantinya akan di-declare di modul ```vars```.
-    * Variable ```laravel_storage_dir``` diganti dengan ```/var/www/laravel/storage``` yang nantinya akan di-declare di modul ```vars```.
-    
+ 
 2. Membuat file ```install_composer.sh``` dalam folder ```scripts```.
 
     ```bash
@@ -266,7 +255,7 @@ Keterangan:
         listen 80 default_server;
         listen [::]:80 default_server;
         
-        root {{ laravel_web_dir }};
+        root {{ /var/www/laravel/public }};
 
         index index.php;
 
@@ -285,15 +274,10 @@ Keterangan:
             include fastcgi_params;
         }
 
-        error_log /var/log/nginx/{{ inventory_hostname }}_error.log;
-        access_log /var/log/nginx/{{ inventory_hostname }}_access.log;
+        error_log /var/log/nginx/{{ worker1 }}_error.log;
+        access_log /var/log/nginx/{{ worker1 }}_access.log;
     }
     ```
-
-    Keterangan:
-
-    * Variable ```laravel_web_dir``` diganti dengan ```/var/www/laravel/public``` yang nantinya akan di-declare di modul ```vars```.
-    * Variable ```inventory_hostname``` diganti sesuai dengan yang ada pada file ```hosts``` yang dalam hal ini adalah ```worker1``` dan ```worker2```.
 
 2. Kemudian membuka ```nginx.yml``` dan memasukkan script berikut:
 
@@ -314,184 +298,16 @@ Membuka ```compose.yml``` dan memasukkan script berikut dibawah modul ```Hosts``
 ```yml
 vars:
     laravel_root_dir: /var/www/laravel
-    laravel_web_dir: "{{ laravel_root_dir }}/public"
-    laravel_cache_dir: "{{ laravel_root_dir }}/bootstrap/cache"
-    laravel_vendor_dir: "{{ laravel_root_dir }}/vendor"
-    laravel_storage_dir: "{{ laravel_root_dir }}/storage"
+    laravel_web_dir: "{{ /var/www/laravel }}/public"
+    laravel_cache_dir: "{{ /var/www/laravel }}/bootstrap/cache"
+    laravel_vendor_dir: "{{ /var/www/laravel }}/vendor"
+    laravel_storage_dir: "{{ /var/www/laravel }}/storage"
     nginx_conf_dir: /etc/nginx
 ```
-```Vars``` digunakan untuk mendeclare seluruh variable yang digunakan didalam script.
+
 
 ## 8. Menyatukan Playbook
 
-Sehingga jika disatukan, maka playbooknya akan terlihat seperti ini :
-
-```yml
----
-- hosts: worker
-
-  vars:
-    laravel_root_dir: /var/www/laravel
-    laravel_web_dir: "{{ laravel_root_dir }}/public"
-    laravel_cache_dir: "{{ laravel_root_dir }}/bootstrap/cache"
-    laravel_vendor_dir: "{{ laravel_root_dir }}/vendor"
-    laravel_storage_dir: "{{ laravel_root_dir }}/storage"
-    nginx_conf_dir: /etc/nginx
-
-  tasks:
-
-    # INSTALL YG DIBUTUHKAN SELAIN PHP
-    - name: Install Nginx, Git, Zip, Unzip, dll
-      become: true
-      apt:
-        name: "{{ item }}"
-        state: latest
-        update_cache: true
-      with_items:
-        - nginx
-        - git
-        - python-software-properties
-        - software-properties-common
-        - zip
-        - unzip
-      notify: 
-        - Stop nginx
-        - Start nginx
-
-    # INSTALL PHP 7.2
-    - name: Tambah PHP 7 PPA Repository
-      become: true
-      apt_repository:
-        repo: 'ppa:ondrej/php' 
-        update_cache: true
-
-    - name: Install PHP 7.2 Packages
-      become: yes
-      apt: 
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - php7.2
-        - php-pear
-        - php7.2-curl
-        - php7.2-dev
-        - php7.2-gd
-        - php7.2-mbstring
-        - php7.2-zip
-        - php7.2-mysql
-        - php7.2-xml
-        - php7.2-intl
-        - php7.2-json
-        - php7.2-cli
-        - php7.2-common
-        - php7.2-fpm
-      notify: 
-        - Restart PHP-fpm
-    
-    # CLONE GIT
-    - name: Bikin direktori
-      become: true
-      file:
-          path: "{{ laravel_root_dir }}"
-          state: directory
-          owner: "{{ ansible_ssh_user }}"
-          group: "{{ ansible_ssh_user }}"
-          recurse: yes
-
-    - name: Clone git
-      git:
-        dest: "{{ laravel_root_dir }}"
-        repo: https://github.com/udinIMM/Hackathon.git
-        force: yes
-
-    # INSTALL COMPOSER
-    - name: Download Composer
-      script: scripts/install_composer.sh
-
-    - name: Setting composer jadi global
-      become: true
-      command: mv composer.phar /usr/local/bin/composer
-
-    - name: Set permission composer
-      become: true
-      file:
-        path: /usr/local/bin/composer
-        mode: "a+x"
-
-    - name: Install dependencies laravel
-      composer:
-        working_dir: "{{ laravel_root_dir }}"
-        no_dev: no
-    
-    # SETTING ENVIRONMENT
-    - name: Bikin .env
-      command: cp "{{ laravel_root_dir }}/.env.example" "{{ laravel_root_dir }}/.env"
-    
-    - name: php artisan key generate
-      command: php "{{ laravel_root_dir }}/artisan" key:generate
-
-    - name: php artisan clear cache
-      command: php "{{ laravel_root_dir }}/artisan" cache:clear
-    
-    - name: set APP_DEBUG=false
-      lineinfile: 
-        dest: "{{ laravel_root_dir }}/.env"
-        regexp: '^APP_DEBUG='
-        line: APP_DEBUG=false
-
-    - name: set APP_ENV=production
-      lineinfile: 
-        dest: "{{ laravel_root_dir }}/.env"
-        regexp: '^APP_ENV='
-        line: APP_ENV=production
-
-    - name: Ganti permission bootstrap/cache directory
-      file:
-        path: "{{ laravel_cache_dir }}"
-        state: directory
-        mode: "a+x"
-
-    - name: Ganti permission vendor directory
-      command: chmod -R 777 "{{ laravel_vendor_dir }}"
-
-    - name: Ganti permission storage directory
-      command: chmod -R 777 "{{ laravel_storage_dir }}"
-    
-    # CONFIG NGINX
-    - name: Configure Nginx
-      become: true
-      template:
-        src: templates/nginx.conf
-        dest: "{{ nginx_conf_dir }}/sites-enabled/default"
-      notify:
-        - Restart nginx
-        - Restart PHP-fpm
-
-  handlers:
-    - name: Restart nginx
-      become: true
-      service: 
-        name: nginx
-        state: restarted
-
-    - name: Stop nginx
-      become: true
-      service: 
-        name: nginx
-        state: stopped
-
-    - name: Start nginx
-      become: true
-      service: 
-        name: nginx
-        state: started
-
-    - name: Restart PHP-fpm
-      become: true
-      service: 
-        name: php7.2-fpm
-        state: restarted
-```
 
 ## Testing
 
