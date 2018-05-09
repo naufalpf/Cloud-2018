@@ -98,10 +98,9 @@ Seluruh software tersebut akan diinstall pada hosts **worker** menggunakan file 
           - curl
 
 ```
-```sh
 
 3. Install PHP 7.2
-
+```
 ansible-playbook -i hosts php.yml -k
 ```
 
@@ -123,7 +122,6 @@ ansible-playbook -i hosts php.yml -k
 ansible-playbook -i hosts php.yml -k
 ```
 
-![Testing](gambar/testing.png)
 ![curl](gambar/master.png "curl")
 ![php](gambar/php.png "php")
 	
@@ -314,11 +312,11 @@ vars:
 1. Menjalankan perintah
 
     ```
-    ansible-playbook -i hosts gitcurl.yml -k
+    ansible-playbook -i hosts master.yml -k
     ```
 
 
-2. Ketikkan alamat IP VM Worker di browser, yang dalam hal ini adalah ```10.151.253.23``` dan ```10.151.253.7```.
+2. Ketikkan alamat IP VM Worker di browser, yang dalam hal ini adalah ```10.151.253.178``` dan ```10.151.253.7```.
 
 ![Build](gambar/hasil.png "Build-Image")
 
