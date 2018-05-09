@@ -541,7 +541,7 @@ Sehingga jika disatukan, maka playbooknya akan terlihat seperti ini :
         state: restarted
 ```
 
-## Langkah 10 - TESTING 
+## Testing
 
 1. Menjalankan perintah
 
