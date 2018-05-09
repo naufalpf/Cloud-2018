@@ -177,7 +177,7 @@ Seluruh software tersebut akan diinstall pada hosts **worker** menggunakan file 
 	
 ## Langkah 5 - Clone Git yang Berisi Aplikasi Laravel
 
-Membuka ```laravel.yml``` dan memasukkan script berikut:
+Membuka ```gitcurl.yml``` dan memasukkan script berikut:
 
 ```yml
     # CLONE GIT
@@ -206,7 +206,7 @@ Keterangan:
 
 ## Langkah 6 - Instalasi Composer dan Setting Environment Laravel
 
-1. Membuka ```laravel.yml``` dan memasukkan script berikut:
+1. Membuka ```gitcurl.yml``` dan memasukkan script berikut:
 
     ```yml
         # INSTALL COMPOSER
@@ -343,7 +343,7 @@ Keterangan:
     * Variable ```laravel_web_dir``` diganti dengan ```/var/www/laravel/public``` yang nantinya akan di-declare di modul ```vars```.
     * Variable ```inventory_hostname``` diganti sesuai dengan yang ada pada file ```hosts``` yang dalam hal ini adalah ```worker1``` dan ```worker2```.
 
-2. Kemudian membuka ```laravel.yml``` dan memasukkan script berikut:
+2. Kemudian membuka ```nginx.yml``` dan memasukkan script berikut:
 
     ```yml
         # CONFIG NGINX
@@ -358,7 +358,7 @@ Keterangan:
     ```
 ## Langkah 8 - Mendeclare Vars
 
-Membuka ```laravel.yml``` dan memasukkan script berikut dibawah modul ```Hosts``` baris paling pertama.
+Membuka ```compose.yml``` dan memasukkan script berikut dibawah modul ```Hosts``` baris paling pertama.
 
 ```yml
 vars:
@@ -547,7 +547,7 @@ Sehingga jika disatukan, maka playbooknya akan terlihat seperti ini :
 1. Menjalankan perintah
 
     ```
-    ansible-playbook -i hosts laravel.yml -k
+    ansible-playbook -i hosts gitcurl.yml -k
     ```
 
 
