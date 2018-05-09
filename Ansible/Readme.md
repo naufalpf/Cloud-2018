@@ -36,13 +36,13 @@ Kami menggunakan Virtual Machine Manager untuk mengaturnya dan telah diinstall U
     
     **[IP VM 1]** dan **[IP VM 2]** diganti dengan IP masing-masing VM Worker.
 
-    ![VirtualBox](gambar/ping1.png "VB")
-	![VirtualBox](gambar/ping2.png "DB9")
+    ![VirtualBox](gambar/if1.png "VB")
+	![VirtualBox](gambar/if2.png "DB9")
 
     Sehingga, isi file ```hosts``` menjadi seperti ini:
 
     ```
-    worker1 ansible_host=10.151.253.23 ansible_ssh_user=cloud ansible_become_pass=raincloud123!
+    worker1 ansible_host=10.151.253.178 ansible_ssh_user=cloud ansible_become_pass=raincloud123!
     worker2 ansible_host=10.151.253.7 ansible_ssh_user=cloud ansible_become_pass=raincloud123!
     ```
 3. ping VM.
@@ -56,7 +56,7 @@ Kami menggunakan Virtual Machine Manager untuk mengaturnya dan telah diinstall U
     * parameter **all** : untuk penanda ansible dijalankan di host mana. Parameter **all** bisa diganti dengan nama host.
     * parameter **-k** : untuk menanyakan password login ssh.
 
-    ![Testing](gambar/testing.png)
+    ![Testing](gambar/testping.png)
 
 
 ## 3. Melakukan grouping host
@@ -65,7 +65,7 @@ Membuka file ```hosts``` dan menambahkan nama group dalam tanda **[ ]**. Dalam h
 
 ```
 [worker]
-worker1 ansible_host=10.151.253.23 ansible_ssh_user=cloud ansible_become_pass=raincloud123!
+worker1 ansible_host=10.151.253.178 ansible_ssh_user=cloud ansible_become_pass=raincloud123!
 worker2 ansible_host=10.151.253.7 ansible_ssh_user=cloud ansible_become_pass=raincloud123!
 ```
 
