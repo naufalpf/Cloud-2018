@@ -5,7 +5,7 @@
 ##### 1. Naufal Pranasetyo F.	5115100057
 ##### 2. Ariya Wildan Devanto	5115100123
 
-## Langkah 1 - Membuat 3 Virtual Machine
+## 1. Membuat 3 Virtual Machine
 3 VM terdiri dari 2 VM Ubuntu 16.04 sebagai Worker dan 1 VM Debian 9 sebagai DB Server. 
 
 
@@ -14,16 +14,16 @@ Kami menggunakan Virtual Machine Manager untuk mengaturnya dan telah diinstall U
 ![VirtualBox](gambar/1.png "VB")
 ![VirtualBox](gambar/3.png "DB9")
 
-## Langkah 2 - Menambahkan Ansible Inventory
+## 2. Menambahkan Ansible Inventory
 
 
-1. Membuat folder **Ansible** dan pindah ke dalam folder tersebut.
+1. Membuat folder **Ansible**, lalu masuk pada folder tersebut
 
     ```bash
     mkdir Ansible
     cd Ansible/
     ```
-2. Membuat file **hosts** sebagai **file ansible inventory**.
+2. Membuat file **hosts** pada folder Ansible
     ```
     nano hosts
     ```
@@ -36,8 +36,8 @@ Kami menggunakan Virtual Machine Manager untuk mengaturnya dan telah diinstall U
     
     **[IP VM 1]** dan **[IP VM 2]** diganti dengan IP masing-masing VM Worker.
 
-    ![VirtualBox](gambar/1.png "VB")
-	![VirtualBox](gambar/3.png "DB9")
+    ![VirtualBox](gambar/ping1.png "VB")
+	![VirtualBox](gambar/ping2.png "DB9")
 
     Sehingga, isi file ```hosts``` menjadi seperti ini:
 
@@ -45,7 +45,7 @@ Kami menggunakan Virtual Machine Manager untuk mengaturnya dan telah diinstall U
     worker1 ansible_host=10.151.253.23 ansible_ssh_user=cloud ansible_become_pass=raincloud123!
     worker2 ansible_host=10.151.253.7 ansible_ssh_user=cloud ansible_become_pass=raincloud123!
     ```
-3. Kemudian jalankan perintah dibawah untuk ping VM.
+3. ping VM.
 
     ```
     ansible -i ./hosts -m ping all -k
@@ -59,7 +59,7 @@ Kami menggunakan Virtual Machine Manager untuk mengaturnya dan telah diinstall U
     ![Testing](gambar/testing.png)
 
 
-## Langkah 3 - Grouping Host
+## 3. Melakukan grouping host
 
 Membuka file ```hosts``` dan menambahkan nama group dalam tanda **[ ]**. Dalam hal ini, kami memberi nama group **worker**.
 
@@ -69,7 +69,7 @@ worker1 ansible_host=10.151.253.23 ansible_ssh_user=cloud ansible_become_pass=ra
 worker2 ansible_host=10.151.253.7 ansible_ssh_user=cloud ansible_become_pass=raincloud123!
 ```
 
-## Langkah 4 - Instalasi Software Pendukung
+## 4. Install menggunakan yml
 
 Software yang dibutuhkan untuk menjalankan Aplikasi Laravel 5.6 adalah:
 
@@ -175,7 +175,7 @@ Seluruh software tersebut akan diinstall pada hosts **worker** menggunakan file 
 	![curl](gambar/gitcurl.png "curl")
 	![php](gambar/php.png "php")
 	
-## Langkah 5 - Clone Git yang Berisi Aplikasi Laravel
+## 5. Clone git
 
 Membuka ```gitcurl.yml``` dan memasukkan script berikut:
 
@@ -204,9 +204,9 @@ Keterangan:
 * Variable ```ansible_ssh_user``` diganti sesuai dengan yang ada pada file ```hosts``` yang dalam hal ini adalah ```cloud```.
 
 
-## Langkah 6 - Instalasi Composer dan Setting Environment Laravel
+## 6. Install Composer
 
-1. Membuka ```gitcurl.yml``` dan memasukkan script berikut:
+1. Membuka ```compose.yml``` dan memasukkan script berikut:
 
     ```yml
         # INSTALL COMPOSER
@@ -298,7 +298,7 @@ Keterangan:
     exit $RESULT
     ```
 
-## Langkah 7 - Konfigurasi Nginx
+## 7. Konfigurasi Nginx
 
 1. Membuat file konfigurasi nginx bernama ```nginx.conf``` dalam folder ```templates```.
 
@@ -356,7 +356,6 @@ Keterangan:
             - Restart nginx
             - Restart PHP-fpm
     ```
-## Langkah 8 - Mendeclare Vars
 
 Membuka ```compose.yml``` dan memasukkan script berikut dibawah modul ```Hosts``` baris paling pertama.
 
@@ -371,7 +370,7 @@ vars:
 ```
 ```Vars``` digunakan untuk mendeclare seluruh variable yang digunakan didalam script.
 
-## Langkah 9 - Menyatukan Playbook
+## 8. Menyatukan Playbook
 
 Sehingga jika disatukan, maka playbooknya akan terlihat seperti ini :
 
