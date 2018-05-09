@@ -86,92 +86,42 @@ Seluruh software tersebut akan diinstall pada hosts **worker** menggunakan file 
     gedit gitcurl.yml
     ```
 2. Menuliskan script berikut:
+```
+  - hosts: worker
+    tasks:
+      - name: Install git-nginx-curl
+        become: yes #untuk menjadi superuser
+        apt: name={{ item }} state=latest update_cache=true
+        with_items:
+          - nginx
+          - git
+          - curl
 
-    ```yml
-    ---
-    - hosts: worker
-      tasks:
-        
-        # INSTALL YG DIBUTUHKAN SELAIN PHP
-        - name: Install Nginx, Git, Zip, Unzip, dll
-          become: true
-          apt:
-            name: "{{ item }}"
-            state: latest
-            update_cache: true
-          with_items:
-            - nginx
-            - git
-            - python-software-properties
-            - software-properties-common
-            - zip
-            - unzip
-          notify:
-            - Stop nginx
-            - Start nginx
+```
+```sh
 
-        # INSTALL PHP 7.2
-        - name: Tambah PHP 7 PPA Repository
-          become: true
-          apt_repository:
-            repo: 'ppa:ondrej/php'
-            update_cache: true
+3. Install PHP 7.2
 
-        - name: Install PHP 7.2 Packages
-          become: yes
-          apt: 
-            name: "{{ item }}"
-            state: latest
-          with_items:
-            - php7.2
-            - php-pear
-            - php7.2-curl
-            - php7.2-dev
-            - php7.2-gd
-            - php7.2-mbstring
-            - php7.2-zip
-            - php7.2-mysql
-            - php7.2-xml
-            - php7.2-intl
-            - php7.2-json
-            - php7.2-cli
-            - php7.2-common
-            - php7.2-fpm
-          notify:
-            - Restart PHP-fpm
+ansible-playbook -i hosts gitcurl.yml -k
+```
 
-    handlers:
-        - name: Restart nginx
-          become: true
-          service:
-            name: nginx
-            state: restarted
-
-        - name: Stop nginx
-          become: true
-          service:
-            name: nginx
-            state: stopped
-
-        - name: Start nginx
-          become: true
-          service:
-            name: nginx
-            state: started
-
-        - name: Restart PHP-fpm
-          become: true
-          service:
-            name: php7.2-fpm
-            state: restarted
-    ```
     Keterangan:
     
-    * Variable ```item``` yang berada dalam tanda **jinja** "{{ }}" digantikan dengan ```with_items```. 
-    * **Zip** dan **unzip** diinstall karena kedepannya akan digunakan untuk menginstall Composer supaya prosesnya lebih cepat.
-    * Proses menginstall **PHP 7.2** adalah harus terlebih dulu menginstall ```python-software-properties```, menambah repo, kemudian baru bisa menginstall php 7.2 beserta packages2nya.
-    * ```Handlers``` digunakan untuk mendefinisikan task yang dipanggil di modul ```notify```, biasanya terkait dengan **restart service**. Kami tuliskan pula **stop** dan **start** hanya untuk sekadar jaga-jaga.
+ ```
+  - hosts: worker
+    tasks:
+      - name: PHP | Install Ondrej PHP PPA
+        become: yes #untuk menjadi superuser
+        apt_repository: repo='ppa:ondrej/php' update_cache=yes
+      - name: PHP | Install PHP 7.2
+        become: yes #untuk menjadi superuser
+        apt: pkg=php7.2 state=latest
+        tags: ['common']
 
+```
+```sh
+ansible-playbook -i hosts php.yml -k
+```
 	![curl](gambar/gitcurl.png "curl")
 	![php](gambar/php.png "php")
 	
