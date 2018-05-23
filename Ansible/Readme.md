@@ -323,5 +323,8 @@ vars:
 ![Build](gambar/hasil2.png "Build-Image")
 
 
-
-
+## Kesalahan 
+1. 
+![Build](gambar/12.png "Build-Image")
+2. 
+![Build](gambar/22.png "Build-Image")
