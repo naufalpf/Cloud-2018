@@ -324,7 +324,9 @@ vars:
 
 
 ## Kesalahan 
-1. 
+1. Kesalahan pada indentasi
 ![Build](gambar/12.png "Build-Image")
-2. 
+2. Kesalahan Kurang syntax
 ![Build](gambar/22.png "Build-Image")
+3. Udah sehingga error
+![Build](gambar/122.png "Build-Image")
